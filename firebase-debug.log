@@ -1,0 +1,17 @@
+[debug] [2021-06-29T15:59:18.663Z] ----------------------------------------------------------------------
+[debug] [2021-06-29T15:59:18.667Z] Command:       /home/sindara/.nvm/versions/node/v15.5.1/bin/node /home/sindara/.nvm/versions/node/v15.5.1/bin/firebase deploy --only functions
+[debug] [2021-06-29T15:59:18.668Z] CLI Version:   9.14.0
+[debug] [2021-06-29T15:59:18.668Z] Platform:      linux
+[debug] [2021-06-29T15:59:18.668Z] Node Version:  v15.5.1
+[debug] [2021-06-29T15:59:19.148Z] Time:          Tue Jun 29 2021 16:59:18 GMT+0100 (West Africa Standard Time)
+[debug] [2021-06-29T15:59:19.149Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-06-29T15:59:19.397Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-06-29T15:59:19.398Z] > authorizing via signed-in user (koikibabatunde14@gmail.com)
+[debug] [2021-06-29T15:59:19.398Z] [iam] checking project testproject2-73370 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2021-06-29T15:59:19.467Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-06-29T15:59:19.468Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-06-29T15:59:21.797Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","pragma":"no-cache","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Tue, 29 Jun 2021 15:59:21 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-06-29T15:59:21.888Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/testproject2-73370:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
