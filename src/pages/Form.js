@@ -1,7 +1,7 @@
 import React, { useState }from 'react'
 
 const Form = () => {
-    const [formData, setFormData] = useState({username: '', password: ''})
+    const [formData, setFormData] = useState({username: '', text: ''})
     const handleChange = e => {
         let {name, value} = e.target
         setFormData({...formData, [name]: value})
@@ -19,7 +19,7 @@ const Form = () => {
               </div>
               <div className="form-group">
                   <label htmlFor="" className="password">text</label>
-                  <input name="password" onChange={handleChange}type="password" className="form-control" />
+                  <textarea name="text" onChange={handleChange} className="form-control" />
               </div>
               <button className="btn btn-primary btn-block">Submit</button>
             </form>  
