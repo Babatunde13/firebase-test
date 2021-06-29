@@ -1,36 +1,70 @@
 import {config} from 'dotenv'
-import axios from 'axios'
+import firebase from 'firebase'
+import bcrypt from 'bcrypt'
 
 config()
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_apiKey,
+    authDomain: process.env.REACT_APP_authDomain,
+    projectId: process.env.REACT_APP_projectId,
+    storageBucket: process.env.REACT_APP_storageBucket,
+    messagingSenderId: process.env.REACT_APP_messagingSenderId,
+    appId: process.env.REACT_APP_appId,
+    databaseUrl: process.env.REACT_APP_databaseUrl
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
 
-const mode ={
-    mode: 'no-cors'
-}
+
+const firestore = firebase.firestore()
+
+const auth = firebase.auth()
 
 export const signup = async (email, password) => {
     try {
-        let res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/register`, {
-            email, password
-        }, {
-            headers: {'Access-Control-Allow-Origin' : '*'}
+        firestore.collection('users').where('email', '==', email).then(users => {
+            if(users.length > 0 ) { 
+                return {
+                    error: 'email in use'
+                }
+            }
         })
-        console.log(res.data)
-        return res.data
+        bcrypt.genSalt(saltRounds, function(err, salt) {
+            bcrypt.hash(password, salt, function(err, hash) {
+                password = hash
+            });
+        });
+        firestore.collection('users').add({
+            email, password
+        }).then(user => {
+            let res = {
+                id: user.id, ...user.data()
+            }
+            console.log(res)
+            return res
+        })
     } catch (error) {
         console.log(error.message)
         return {
             message: error.message,
-            status: false
+            status: false,
+            code: 400
         }
     }
 }
 
 export const login = async (email, password) => {
     try {
-        let res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/login`, {
-            email, password
-        }, mode)
-        return res.data
+        firestore.collection('users').where('email', '==', email)
+        .then(users => {
+             let user = users[0]
+             bcrypt.compare(password, user.data().password, function(err, result) {
+                if (result) {
+                    let res = {id: user.id, ...user.data()}
+                    return res
+                }
+             });
+        })
     } catch (error) {
         console.log(error.message)
         return {
@@ -42,10 +76,14 @@ export const login = async (email, password) => {
 
 export const createData = async (username, text, userId) => {
     try {
-        let res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/create_data`, {
-            username, text, userId
-        }, mode)
-        return res.data
+       firestore.collection('data').add({
+            username, text, user: {userId}
+        }).then(data => {
+            let res = {
+                id: data.id, ...data.data()
+            }
+            return res
+        })
     } catch (error) {
         console.log(error.message)
         return {
