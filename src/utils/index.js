@@ -34,7 +34,7 @@ export const signup = async (email, password) => {
             email, password: hashedPassword, isAdmin: false
         })
         return {
-            id: newUser.id, email
+            id: newUser.id, email, isAdmin: false
         }
     } catch (error) {
         console.log(error.message)

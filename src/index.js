@@ -5,12 +5,12 @@ import reportWebVitals from './reportWebVitals';
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from 'redux-saga'
-import timestamp from "./store/reducers/timestamp";
-import rootSaga from './store/sagas/timestamp'
+import reducer from "./store/reducers";
+import rootSaga from './store/sagas/rootSaga'
 
 const sagaMiddleware = createSagaMiddleware()
 const store = createStore(
-  timestamp,
+  reducer,
   applyMiddleware(sagaMiddleware)
 )
 sagaMiddleware.run(rootSaga)

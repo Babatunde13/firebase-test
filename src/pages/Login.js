@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
 
 const Login = () => {
+    const history = useHistory()
+    const dispatch = useDispatch()
     const [signInData, setSignInData] = useState({email: '', password: ''})
     const handleChange = e => {
         let {name, value} = e.target
@@ -8,7 +12,8 @@ const Login = () => {
     }
     const submitForm = e => {
         e.preventDefault();
-        console.log(signInData)
+        dispatch({type: 'SIGNIN', data: signInData})
+        history.push('/')
     }
     return (
         <div>

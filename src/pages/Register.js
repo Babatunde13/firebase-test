@@ -1,7 +1,10 @@
 import React, {useState} from 'react'
-import { signup } from '../utils/index'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
 
 const Register = () => {
+    const history = useHistory()
+    const dispatch = useDispatch()
     const [signUpData, setSignUpData] = useState({email: '', password: ''})
 
     const handleChange = e => {
@@ -10,9 +13,8 @@ const Register = () => {
     }
     const submitForm = async e => {
         e.preventDefault();
-        console.log(signUpData)
-        let res = await signup(signUpData.email, signUpData.password)
-        console.log(res)
+        dispatch({type: 'SIGNUP', data: signUpData})
+        history.push('/')
     }
     return (
         <div>

@@ -1,4 +1,11 @@
-const timestamp = (state=[], action) => {
+let initState = [
+    {
+        email: '',
+        timestamp: ''
+    }
+]
+
+const timestamp = (state=initState, action) => {
     switch (action.type) {
         case 'GET_TIMESTAMPS':
             return state
