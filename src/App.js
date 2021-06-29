@@ -7,9 +7,10 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 
 function App() {
+  console.log('Heyyy')
   return (
     <BrowserRouter>
-    <Navbar />
+      <Navbar />
       <Switch>
         <Route exact path='/' component={Home} />
         <Route exact path='/auth/login' component={Login} />
