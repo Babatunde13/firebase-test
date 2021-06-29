@@ -2,7 +2,7 @@ import { put, takeLatest, all } from 'redux-saga/effects'
 import { signup as signUp, login as signIn } from "../../utils";
 
 export function* signup (data) {
-    yield takeLatest('SIGNUP_ASYNC', signupAsync(data))
+    yield takeLatest('SIGNUP', signupAsync(data))
 }
 
 function* signupAsync(data) {
@@ -18,7 +18,7 @@ function* signupAsync(data) {
             })
         } else {
             yield put({
-                type: 'SIGNUP',
+                type: 'SIGNUP_ASYNC',
                 data_
             })
         }
@@ -31,7 +31,7 @@ function* signupAsync(data) {
 }
 
 export function* signin (data) {
-    yield takeLatest('SIGNIN_ASYNC', signinAsync(data))
+    yield takeLatest('SIGNIN', signinAsync(data))
 }
 
 function* signinAsync(data) {
@@ -47,7 +47,7 @@ function* signinAsync(data) {
             })
         } else {
             yield put({
-                type: 'SIGNIN',
+                type: 'SIGNIN_ASYNC',
                 data_
             })
         }

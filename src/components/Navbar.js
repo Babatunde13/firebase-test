@@ -14,29 +14,29 @@ const Navbar = () => {
                 <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <Link className="navbar-brand" href="/">Hidden brand</Link>
+                <Link className="navbar-brand" to="/">Hidden brand</Link>
                 <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li className="nav-item active">
-                        <Link className="nav-link" href="/">Home <span className="sr-only">(current)</span></Link>
+                        <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                     </li>
                     {user.email ?
                         <>
                             <li className="nav-item">
-                                <Link className="nav-link" href="/create/form">Create</Link>
+                                <Link className="nav-link" to="/create/form">Create</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" href="/timestamp">Timestamps</Link>
+                                <Link className="nav-link" to="/timestamp">Timestamps</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" onClick={() => {dispatch({type: 'SIGNOUT'}); history.push('/')}} href="/auth/signout">SignOut</Link>
+                                <Link className="nav-link" onClick={() => {dispatch({type: 'SIGNOUT'}); history.push('/')}} to="/auth/signout">SignOut</Link>
                             </li>
                         </> :
                         <>
                             <li className="nav-item">
-                                <a className="nav-link" href="/auth/login">Sign In</a>
+                                <Link className="nav-link" to="/auth/login">Sign In</Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/auth/register">Sign Up</a>
+                                <Link className="nav-link" to="/auth/register">Sign Up</Link>
                             </li>
                         </>
                     }
