@@ -11,6 +11,7 @@ admin.initializeApp({
 
 exports.register = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Credentials', 'true');
     console.log('Register endpoint')
     if (req.method === 'POST') {
         const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt())
@@ -39,6 +40,7 @@ exports.register = functions.https.onRequest(async (req, res) => {
 
 exports.login = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Credentials', 'true');
     if (req.method === 'POST') {
         admin
         .auth()
@@ -67,6 +69,7 @@ exports.login = functions.https.onRequest(async (req, res) => {
 
 exports.create_data = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Credentials', 'true');
     if (req.method ===  'POST') {
         admin
         .auth()
