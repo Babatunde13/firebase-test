@@ -1,14 +1,17 @@
 import React, {useState} from 'react'
+import { signup } from '../utils/index'
 
 const Register = () => {
-    const [signInData, setSignInData] = useState({email: '', password: ''})
+    const [signUpData, setSignUpData] = useState({email: '', password: ''})
+
     const handleChange = e => {
         let {name, value} = e.target
-        setSignInData({...signInData, [name]: value})
+        setSignUpData({...signUpData, [name]: value})
     }
-    const submitForm = e => {
+    const submitForm = async e => {
         e.preventDefault();
-        console.log(signInData)
+        console.log(signUpData)
+        await signup(signUpData.email, signUpData.password)
     }
     return (
         <div>

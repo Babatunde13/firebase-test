@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const serviceAccount = require("./testproject2-73370-firebase-adminsdk-l6v36-92b28dc61b.json");
 const bcrypt = require("bcrypt")
+const cors = require('cors')({origin: true});
 
 
 admin.initializeApp({
@@ -9,15 +10,30 @@ admin.initializeApp({
 });
 
 
-exports.register = functions.https.onRequest(async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Credentials', 'true');
+exports.register = functions.https.onRequest((req, res) => {
     console.log('Register endpoint')
+    res.set('Access-Control-Allow-Origin', '*')
+    res.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'POST') {
-        const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt())
+        // res.set('Access-Control-Max-Age', '3600');
         admin
-        .auth()
-        .createUser({
+        .firestore()
+        .collection('users')
+        .where(
+            'email', '==', req.body.email
+        )
+        .then((userRecords) => {
+            console.log(userRecords)
+            if (userRecords.length > 0) {
+                return res.status(400).json({message: 'email in use'})
+            }
+        })
+        const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync())
+        admin
+        .firestore()
+        .collection('users')
+        .add({
             email: req.body.email,
             password: password,
             isAdmin: false,
@@ -32,26 +48,29 @@ exports.register = functions.https.onRequest(async (req, res) => {
             return res.status(400).json({
                 message: error.message,
             })
-        });
+        })    
     } else {
         return res.status(405).json({message: 'Method not allowed'})
     }
-});
+})
 
-exports.login = functions.https.onRequest(async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Credentials', 'true');
+exports.login = functions.https.onRequest((req, res) => {
+    res.set('Access-Control-Allow-Origin', '*')
+    res.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'POST') {
+        // res.set('Access-Control-Max-Age', '3600');
         admin
-        .auth()
-        .getUserByEmail(
-            req.body.email
+        .firestore()
+        .collection('users')
+        .where(
+            'email', '==', req.body.email
         )
-        .then(async (userRecord) => {
+        .then((userRecords) => {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log('Successfully logged in:', userRecord.uid);
-            if (await bcrypt.compare(req.body.password, userRecord.passwordHash)) {
-                return res.status(200).json({id: userRecord.uid, ...userRecord.toJSON()})
+            if (bcrypt.compareSync(req.body.password, userRecord[0].passwordHash)) {
+                return res.status(200).json({id: userRecord[0].uid, ...userRecord[0].toJSON()})
             } else {
                 return res.status(401).json({message: 'Invalid email or password'})
             }
@@ -65,15 +84,18 @@ exports.login = functions.https.onRequest(async (req, res) => {
     } else {
         return res.status(405).json({message: 'Method not allowed'})
     }
-});
+})
 
 exports.create_data = functions.https.onRequest(async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Credentials', 'true');
+    res.set('Access-Control-Allow-Origin', '*')
+    res.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE, PUT');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method ===  'POST') {
+        // res.set('Access-Control-Max-Age', '3600');
         admin
-        .auth()
-        .getUser(
+        .firestore()
+        .collection('users')
+        .doc(
             req.body.userId
         )
         .then((userRecord) => {
@@ -106,7 +128,6 @@ exports.create_data = functions.https.onRequest(async (req, res) => {
 
 
 exports.add_log = functions.firestore.document('/data/{dataId}').onCreate((snapshot, ctx) => {
-    // let data = snapshot.exists()
     admin.firestore().collection('log').add({
         email: snapshot.data().user.email,
         timestamp: admin.firestore.FieldValue.serverTimestamp()

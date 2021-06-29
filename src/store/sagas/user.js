@@ -6,18 +6,19 @@ export function* signup (data) {
 }
 
 function* signupAsync(data) {
-    try {
-        let data = signUp(data.email, data.password)
-        yield put({
-            type: 'SIGNUP',
-            data
-        })
-    } catch (error) {
-        yield put({
-            type: 'SIGNUP_ERROR',
-            error
-        })
-    }
+    console.log(data)
+    // try {
+    //     let data_ = signUp(data.email, data.password)
+    //     yield put({
+    //         type: 'SIGNUP',
+    //         data_
+    //     })
+    // } catch (error) {
+    //     yield put({
+    //         type: 'SIGNUP_ERROR',
+    //         error
+    //     })
+    // }
 }
 
 export function* signin (data) {
@@ -26,10 +27,10 @@ export function* signin (data) {
 
 function* signinAsync(data) {
     try {
-        let data = signIn(data.email, data.password)
+        let data_ = signIn(data.email, data.password)
         yield put({
             type: 'SIGNIN',
-            data
+            data_
         })
     } catch (error) {
         yield put({
