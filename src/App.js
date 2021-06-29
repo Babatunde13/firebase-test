@@ -6,9 +6,12 @@ import Form from "./pages/Form";
 import Timestamp from "./pages/Timestamp";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
+// import {config} from 'dotenv'
+
+// config()
 
 function App() {
-  console.log('Heyyy')
+  console.log(process.env)
   return (
     <BrowserRouter>
       <Navbar />
