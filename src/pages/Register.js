@@ -11,7 +11,8 @@ const Register = () => {
     const submitForm = async e => {
         e.preventDefault();
         console.log(signUpData)
-        await signup(signUpData.email, signUpData.password)
+        let res = await signup(signUpData.email, signUpData.password)
+        console.log(res)
     }
     return (
         <div>
