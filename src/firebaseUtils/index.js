@@ -20,8 +20,42 @@ import axios from 'axios'
 
 const signup = async (email, password) => {
     try {
-        let res = await axios.get()
+        let res = await axios.post('https://us-central1-testproject2-73370.cloudfunctions.net/register', {
+            email, password
+        })
+        return res.data
     } catch (error) {
-        
+        return {
+            message: error.message,
+            status: false
+        }
+    }
+}
+
+const login = async (email, password) => {
+    try {
+        let res = await axios.post('https://us-central1-testproject2-73370.cloudfunctions.net/login', {
+            email, password
+        })
+        return res.data
+    } catch (error) {
+        return {
+            message: error.message,
+            status: false
+        }
+    }
+}
+
+const createData = async (username, text, userId) => {
+    try {
+        let res = await axios.post('https://us-central1-testproject2-73370.cloudfunctions.net/create_data', {
+            username, text, userId
+        })
+        return res.data
+    } catch (error) {
+        return {
+            message: error.message,
+            status: false
+        }
     }
 }
