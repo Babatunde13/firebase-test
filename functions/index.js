@@ -11,6 +11,7 @@ admin.initializeApp({
 
 exports.register = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
+    console.log('Register endpoint')
     if (req.method === 'POST') {
         const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt())
         admin
@@ -23,16 +24,16 @@ exports.register = functions.https.onRequest(async (req, res) => {
         .then((userRecord) => {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log('Successfully created new user:', userRecord.uid);
-            res.status(201).json({id: userRecord.uid, ...userRecord.toJSON()})
+            return res.status(201).json({id: userRecord.uid, ...userRecord.toJSON()})
         })
         .catch((error) => {
             console.log('Error creating new user:', error);
-            res.status(400).json({
+            return res.status(400).json({
                 message: error.message,
             })
         });
     } else {
-        res.status(405).status({message: 'Method not allowed'})
+        return res.status(405).json({message: 'Method not allowed'})
     }
 });
 
@@ -48,19 +49,19 @@ exports.login = functions.https.onRequest(async (req, res) => {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log('Successfully logged in:', userRecord.uid);
             if (await bcrypt.compare(req.body.password, userRecord.passwordHash)) {
-                res.status(200).json({id: userRecord.uid, ...userRecord.toJSON()})
+                return res.status(200).json({id: userRecord.uid, ...userRecord.toJSON()})
             } else {
-                res.status(401).json({message: 'Invalid email or password'})
+                return res.status(401).json({message: 'Invalid email or password'})
             }
         })
         .catch((error) => {
             console.log('Error logging in:', error);
-            res.status(400).json({
+            return res.status(400).json({
                 message: error.message,
             })
         });
     } else {
-        res.status(405).status({message: 'Method not allowed'})
+        return res.status(405).json({message: 'Method not allowed'})
     }
 });
 
@@ -81,7 +82,7 @@ exports.create_data = functions.https.onRequest(async (req, res) => {
                 username: req.body.username,
                 text: req.body.text
             }).then(data => {
-                res.status(201).json({
+                return res.status(201).json({
                     message: 'Successfully created data',
                     data: {
                         ...data
@@ -91,20 +92,20 @@ exports.create_data = functions.https.onRequest(async (req, res) => {
         })
         .catch((error) => {
             console.log('Error creating new user:', error);
-            res.status(400).json({
+            return res.status(400).json({
                 message: error.message,
             })
         });
     } else {
-        res.status(405).status({message: 'Method not allowed'})
+        return res.status(405).json({message: 'Method not allowed'})
     }
 });
 
 
 exports.add_log = functions.firestore.document('/data/{dataId}').onCreate((snapshot, ctx) => {
-    let data = snapshot.val()
+    // let data = snapshot.exists()
     admin.firestore().collection('log').add({
-        email: data.user.email,
-        timestamp: new Date()
+        email: snapshot.data().user.email,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
     })
 })
