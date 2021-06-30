@@ -1,14 +1,27 @@
 import React, { useState }from 'react'
+import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
+import { createData } from '../utils'
 
 const Form = () => {
+    const history = useHistory()
+    const user = useSelector(state => state.user)
     const [formData, setFormData] = useState({username: '', text: ''})
     const handleChange = e => {
         let {name, value} = e.target
         setFormData({...formData, [name]: value})
     }
-    const submitForm = e => {
-        e.preventDefault();
+    const submitForm = async e => {
         console.log(formData)
+        e.preventDefault()
+        let res = await createData(formData.username, formData.text, user.email, '..')
+        console.log(res)
+        if (!res.error) {
+            alert('Form created successfully')
+            history.push('/')
+        } else {
+            alert(res.error)
+        }
     }
     return (
         <div>
