@@ -13,14 +13,11 @@ const Form = () => {
         setFormData({...formData, [name]: value})
     }
     const submitForm = async e => {
-        console.log(formData)
         e.preventDefault()
         let res = await createData(formData.username, formData.text, user.email, user.id)
-        console.log(res)
         if (!res.error) {
             alert('Form created successfully')
             getTimestamps().then(res => {
-                console.log(res)
                 dispatch({type: 'GET_TIMESTAMPS', data: res})
             })
             history.push('/')

@@ -8,7 +8,6 @@ const Navbar = () => {
     const user = useSelector(state => state.user)
     const history = useHistory()
     const dispatch = useDispatch()
-    console.log(user)
     const signout = () => {
         localStorage.removeItem('userId')
         dispatch({type: 'SIGNOUT'})
@@ -16,7 +15,6 @@ const Navbar = () => {
     }
     const becomeAdmin = async () => {
         let user = await makeAdmin(localStorage.getItem('userId'))
-        console.log(user)
         if (user.error) {
             alert(user.error)
         } else {

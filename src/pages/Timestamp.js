@@ -5,13 +5,10 @@ import { getTimestamps } from '../utils'
 const Tamstamp = () => {
     const timestamps = useSelector(state => state.timestamp)
     const user = useSelector(state => state.user)
-    console.log(timestamps)
     const dispatch = useDispatch()
     useEffect(() => {
         getTimestamps().then(res => {
-            console.log(res)
             dispatch({type: 'GET_TIMESTAMPS', data: res})
-            console.log(timestamps)
         })
         // eslint-disable-next-line
     }, [])
@@ -33,7 +30,7 @@ const Tamstamp = () => {
                         <tr key={idx}>
                             <td>{idx+1}</td>
                             <td>{timestamp.email}</td>
-                            <td>{timestamp.email}</td>
+                            <td>{timestamp.timestamp.toDate().toString()}</td>
                         </tr>
                     )
                 })}
