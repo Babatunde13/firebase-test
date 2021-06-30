@@ -99,7 +99,7 @@ export const getUserData = async (userId) => {
 export const createData = async (username, text,email,  userId) => {
     try {
        let newData = await firestore.collection('data').add({
-            username, text, user: {userId}
+            username, text, user: {userId, email}
         })
         return {
             id: newData.id, text, username, user: {userId, email}

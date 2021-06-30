@@ -6,6 +6,9 @@ import { createData, getTimestamps } from '../utils'
 const Form = () => {
     const history = useHistory()
     const dispatch = useDispatch()
+    if (!localStorage.getItem('userId')) {
+        history.push('/')
+    }
     const user = useSelector(state => state.user)
     const [formData, setFormData] = useState({username: '', text: ''})
     const handleChange = e => {
