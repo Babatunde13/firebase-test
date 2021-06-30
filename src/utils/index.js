@@ -133,3 +133,16 @@ export const getTimestamps = async () => {
         
     }
 }
+
+
+export const makeAdmin = async (userId) => {
+    try {
+        let user = await firestore.collection('users').doc(userId).update({isAdmin: true})
+        console.log(user)
+        return {id: user.id, ...user.data()}
+    } catch (error) {
+        return {
+            error: error.message
+        }
+    }
+}

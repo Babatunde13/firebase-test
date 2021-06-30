@@ -7,6 +7,7 @@ admin.initializeApp({
 });
 
 exports.add_log = functions.firestore.document('/data/{dataId}').onCreate((snapshot, ctx) => {
+  console.log(snapshot.data())
     admin.firestore().collection('log').add({
         email: snapshot.data().user.email,
         timestamp: admin.firestore.FieldValue.serverTimestamp()

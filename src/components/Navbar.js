@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
+import {makeAdmin} from '../utils'
 
 const Navbar = () => {
     const user = useSelector(state => state.user)
@@ -12,6 +13,16 @@ const Navbar = () => {
         localStorage.removeItem('userId')
         dispatch({type: 'SIGNOUT'})
         history.push('/')
+    }
+    const becomeAdmin = async () => {
+        let user = await makeAdmin(localStorage.getItem('userId'))
+        console.log(user)
+        if (user.error) {
+            alert(user.error)
+        } else {
+            dispatch({type: 'SIGNIN', data: {...user, isLoading: false}})
+            alert('You are now an admin')
+        }
     }
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -29,6 +40,9 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/create/form">Create</Link>
                             </li>
+                            {!user.isAdmin && <li className="nav-item">
+                                <Link className="nav-link" onClick={becomeAdmin}>Become an admin</Link>
+                            </li>}
                             <li className="nav-item">
                                 <Link className="nav-link" to="/timestamp">Timestamps</Link>
                             </li>
