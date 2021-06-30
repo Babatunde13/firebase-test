@@ -33,6 +33,7 @@ export const signup = async (email, password) => {
         let newUser = await firestore.collection('users').add({
             email, password: hashedPassword, isAdmin: false
         })
+        console.log(newUser)
         return {
             id: newUser.id, email, isAdmin: false
         }
@@ -56,7 +57,8 @@ export const login = async (email, password) => {
                 error: 'Invalid email or password'
             }
         }
-        let user = users[0]
+        console.log(users.docs)
+        let user = users.docs[0]
         console.log(user.data())
         let isUser = bcrypt.compareSync(password, user.data().password)
         if (isUser) {
@@ -67,6 +69,30 @@ export const login = async (email, password) => {
             return {
                 error: 'Invalid email or password'
             }
+        }
+    } catch (error) {
+        console.log(error.message)
+        return {
+            error: error.message,
+            status: false,
+            code: 400
+        }
+    }
+}
+
+export const getUserData = async (userId) => {
+    try {
+        let user = await firestore.collection('users')
+            .doc(userId)
+            .get()
+        console.log(user.data())
+        if (!user.exists) {
+            return {
+                error: 'Invalid email or password'
+            }
+        }
+        return {
+            data: {id: user.id, ...user.data()}
         }
     } catch (error) {
         console.log(error.message)
@@ -93,5 +119,17 @@ export const createData = async (username, text,email,  userId) => {
             status: false,
             code: 400
         }
+    }
+}
+
+export const getTimestamps = async () => {
+    try {
+        let timestamps = await firestore.collection('log').get()
+        return timestamps.docs.map(doc => {
+            console.log(doc.data().toDate)
+            return {id: doc.id, ...doc.data()}
+        })
+    } catch (error) {
+        
     }
 }

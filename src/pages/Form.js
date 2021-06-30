@@ -1,10 +1,11 @@
 import React, { useState }from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import { createData } from '../utils'
+import { createData, getTimestamps } from '../utils'
 
 const Form = () => {
     const history = useHistory()
+    const dispatch = useDispatch()
     const user = useSelector(state => state.user)
     const [formData, setFormData] = useState({username: '', text: ''})
     const handleChange = e => {
@@ -18,6 +19,10 @@ const Form = () => {
         console.log(res)
         if (!res.error) {
             alert('Form created successfully')
+            getTimestamps().then(res => {
+                console.log(res)
+                dispatch({type: 'GET_TIMESTAMPS', data: res})
+            })
             history.push('/')
         } else {
             alert(res.error)

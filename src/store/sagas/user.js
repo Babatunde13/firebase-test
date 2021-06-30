@@ -1,15 +1,14 @@
-import { put, takeLatest, all } from 'redux-saga/effects'
+import { put, takeLatest, all, call, fork } from 'redux-saga/effects'
 import { signup as signUp, login as signIn } from "../../utils";
 
 export function* signup (data) {
-    yield takeLatest('SIGNUP', signupAsync(data))
+    yield takeLatest({type: 'SIGNUP'}, signupAsync, data)
 }
 
 function* signupAsync(data) {
     console.log(data)
     try {
-        let data_ 
-        signUp(data.email, data.password).then(res => {data_ = res})
+        let data_ = yield call(signUp,data.email, data.password)
         console.log(data_)
         if (data_.error) {
             yield put({
@@ -31,14 +30,16 @@ function* signupAsync(data) {
 }
 
 export function* signin (data) {
-    yield takeLatest('SIGNIN', signinAsync(data))
+    yield takeLatest({type: 'SIGNIN'}, signinAsync, data)
 }
 
 function* signinAsync(data) {
     console.log(data)
     try {
-        let data_ 
-        signIn(data.email, data.password).then(res => {data_ = res})
+        yield put({
+            type: 'ISPENDING'
+        })
+        let data_  = yield call(signIn, data.email, data.password)
         console.log(data_)
         if (data_.error) {
             yield put({
@@ -61,7 +62,7 @@ function* signinAsync(data) {
 
 export default function* userSaga() {
     yield all([
-      signin,
-      signup
+      fork(signin),
+      fork(signup)
     ])
   }

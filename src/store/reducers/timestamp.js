@@ -8,7 +8,7 @@ let initState = [
 const timestamp = (state=initState, action) => {
     switch (action.type) {
         case 'GET_TIMESTAMPS':
-            return state
+            return action.data
         case 'ADD_TIMESTAMP':
             return [action.payload, ...state]
         case 'EDIT_TIMESTAMP':

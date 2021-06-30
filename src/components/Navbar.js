@@ -8,6 +8,11 @@ const Navbar = () => {
     const history = useHistory()
     const dispatch = useDispatch()
     console.log(user)
+    const signout = () => {
+        localStorage.removeItem('userId')
+        dispatch({type: 'SIGNOUT'})
+        history.push('/')
+    }
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +33,7 @@ const Navbar = () => {
                                 <Link className="nav-link" to="/timestamp">Timestamps</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" onClick={() => {dispatch({type: 'SIGNOUT'}); history.push('/')}} to="/auth/signout">SignOut</Link>
+                                <Link className="nav-link" onClick={signout} >SignOut</Link>
                             </li>
                         </> :
                         <>

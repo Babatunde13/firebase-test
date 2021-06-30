@@ -1,19 +1,31 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
+import {login } from '../utils'
 
 const Login = () => {
     const history = useHistory()
+    if (localStorage.getItem('userId')) {
+        history.push('/')
+    }
+    const user = useSelector(state => state.user)
     const dispatch = useDispatch()
     const [signInData, setSignInData] = useState({email: '', password: ''})
     const handleChange = e => {
         let {name, value} = e.target
         setSignInData({...signInData, [name]: value})
     }
-    const submitForm = e => {
+    const submitForm = async e => {
         e.preventDefault();
-        dispatch({type: 'SIGNIN', data: signInData})
-        history.push('/')
+        dispatch({type: 'ISLOADING'})
+        let data = await login(signInData.email, signInData.password)
+        if (data.error) {
+            alert(data.error)
+        } else {
+            localStorage.setItem('userId', data.id)
+            dispatch({type: 'SIGNIN', data})
+            history.push('/')
+        }
     }
     return (
         <div>
@@ -26,7 +38,7 @@ const Login = () => {
                   <label htmlFor="" className="password">Password</label>
                   <input name="password" onChange={handleChange} type="password" className="form-control" />
               </div>
-              <button className="btn btn-primary btn-block">Login</button>
+              <button className="btn btn-primary btn-block">{user.isloading? 'Logging in...' : 'Login'}</button>
             </form>  
         </div>
     )
